@@ -19,9 +19,9 @@ coordinates(hh) <- c("x", "y")
 proj4string(hh) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 hh.utm <- spTransform(hh, CRS("+proj=utm +zone=30 +ellps=WGS84 +units=m +no_defs"))
 
-writeOGR(hh.utm, "WHSA_hh.shp", "WHSA_hh", "ESRI Shapefile")
+writeOGR(hh.utm, "WHSA_hh_UTM30.shp", "WHSA_hh", "ESRI Shapefile")
 
 hh.utm <- as.data.frame(hh.utm)
 qplot(hh.utm$x, hh.utm$y, xlab="Easting", ylab="Northing", main="WHSA HH in UTM30")
 ggsave("household_positions.png", width=WIDTH, height=HEIGHT, dpi=DPI)
-write.csv(hh.utm, file="WHSAII_household_locations_UTM30.csv", row.names=F)
+write.csv(hh.utm, file="WHSA_hh_UTM30.csv", row.names=F)
