@@ -20,6 +20,10 @@ from osgeo import gdal
 #window_size = 2 # Window that is 12 meters per side
 window_size = 50 # Window that is 12 meters per side
 window_width = (window_size*2) + 1
+# Number of classes in the image. If the classes are not denoted by sequention 
+# numbers, the code will need to be modified where the 'classes' variable is 
+# setup towards the end of the code.
+num_classes = 4 
 
 data_filename = 'VIS_%spixels_windows.npy'%window_size
 results_filename = 'VIS_%spixels_results.npy'%window_size
@@ -91,6 +95,7 @@ else:
     print("***Loading data...")
     data = np.load(data_filename)
 
+print("***Calculating distance matrix...")
 # Calculate the distance matrix, storing in a matrix the distance of each cell 
 # from the center point of the matrix (where the matrix is a square matrix with 
 # (window_size*2)*1 rows and columns). The distances in the matrix are 
@@ -102,18 +107,19 @@ y_dist = x_dist.transpose()
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)
+dists = np.dot(dists, np.ones(data.shape))
+print "dists.shape:", dists.shape
  
 print("***Running class calculations...")
-first_run = True
-for max_dist in np.arange(0,window_size,10):
-    masked = np.dot(dists < max_dist, data)
-    print("Current dist: %s"%max_dist)
-    for class_num in xrange(0,5):
-        print("\tClass: %s"%class_num)
-        this_result = np.sum(np.sum(masked == class_num, 1), 0)
-        if first_run==True:
-            results = np.array(this_result, dtype='int8')
-            first_run = False
-        else:
-            results = np.dstack(results, this_result)
-np.save(results_filename, results)
+classes = np.arange(0,num_classes+1)
+max_dists = np.arange(0,window_size,10)
+results = np.zeros((np.shape(data)[2], len(classes), len(max_dists)), dtype="int8")
+for max_dist_index in xrange(0, len(max_dists)):
+    masked = dists < max_dists[max_dist_index] * data
+    print "masked.shape:", masked.shape
+    print("Current dist: %s"%max_dists[max_dist_index])
+    for class_index in xrange(0, num_classes+1):
+        print("\tClass: %s"%classes[class_index])
+        results[:,class_index, max_dist_index] = np.sum(np.sum(
+            masked == classes[class_index], 1), 0)
+        np.save(results_filename, results)
