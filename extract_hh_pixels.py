@@ -21,19 +21,11 @@ from osgeo import gdal
 window_size = 50 # Window that is 12 meters per side
 window_width = (window_size*2) + 1
 
-# Calculate the distance matrix, storing in a matrix the distance of each cell 
-# from the center point of the matrix (where the matrix is a square matrix with 
-# (window_size*2)*1 rows and columns). The distances in the matrix are 
-# expressed directly in distance by multiplying by the resolution of the raster 
-# (this converts the distances from being expressed in number of pixels to 
-# number of meters).
-x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
-y_dist = x_dist.transpose()
-# Use the distance formula (where the center point has a (x,y) location of 
-# (0,0):
-dists = np.sqrt(x_dist**2+y_dist**2)
- 
-if not os.path.exists('VIS_windows_%spixels.npy'%window_size):
+data_filename = 'VIS_%spixels_windows.npy'%window_size
+results_filename = 'VIS_%spixels_results.npy'%window_size
+
+if not os.path.exists(data_filename):
+    print("***Loading household coordinate data...")
     #ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
     ds = gdal.Open("/media/G-Tech_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
     #ds = gdal.Open("R:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
@@ -89,20 +81,39 @@ if not os.path.exists('VIS_windows_%spixels.npy'%window_size):
         lr_x, lr_y = center_x+window_size+1, center_y-window_size
         box = image[ul_x:lr_x, lr_y:ul_y]
         if first_run==True:
-            first_run = False
             data = np.array(box, dtype='int8')
+            first_run = False
         else:
             data = np.dstack((data, box))
     print("\nSaving data...")
-    np.save('VIS_windows_%spixels.npy'%window_size, data)    # save to file
+    np.save(data_filename, data)
 else:
-    print("Loading data...")
-    data = np.load('VIS_windows_%spixels.npy'%window_size)
+    print("***Loading data...")
+    data = np.load(data_filename)
 
-print("Multiplying...")
-print "data_shape:", data.shape
-masked = np.dot((dists<20), data)
-print "masked_shape:", masked.shape
-masked_sum_threes = np.sum(np.sum(masked==3,1),0)
-print masked_sum_threes
-print masked_sum_threes.shape
+# Calculate the distance matrix, storing in a matrix the distance of each cell 
+# from the center point of the matrix (where the matrix is a square matrix with 
+# (window_size*2)*1 rows and columns). The distances in the matrix are 
+# expressed directly in distance by multiplying by the resolution of the raster 
+# (this converts the distances from being expressed in number of pixels to 
+# number of meters).
+x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
+y_dist = x_dist.transpose()
+# Use the distance formula (where the center point has a (x,y) location of 
+# (0,0):
+dists = np.sqrt(x_dist**2+y_dist**2)
+ 
+print("***Running class calculations...")
+first_run = True
+for max_dist in np.arange(0,window_size,10):
+    masked = np.dot(dists < max_dist, data)
+    print("Current dist: %s"%max_dist)
+    for class_num in xrange(0,5):
+        print("\tClass: %s"%class_num)
+        this_result = np.sum(np.sum(masked == class_num, 1), 0)
+        if first_run==True:
+            results = np.array(this_result, dtype='int8')
+            first_run = False
+        else:
+            results = np.dstack(results, this_result)
+np.save(results_filename, results)
