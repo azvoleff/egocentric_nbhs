@@ -17,7 +17,7 @@ from osgeo import gdal
 # determines the maximum buffer radius that can be considered.
 #window_size = 0 # Single 2.4m pixel
 #window_size = 2 # Window that is 12 meters per side
-window_size = 25 # Window that is 12 meters per side
+window_size = 200 # Window that is 12 meters per side
 window_width = (window_size*2) + 1
 # Number of classes in the image. If the classes are not denoted by sequention 
 # numbers, the code will need to be modified where the 'classes' variable is 
@@ -96,10 +96,7 @@ y_dist = x_dist.transpose()*np.abs(pixel_height)
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)
-print dists.shape
-print np.tile(dists, (data.shape[2], 1, 1)).shape
 dists = np.tile(dists, (data.shape[2], 1, 1))
-print dists.shape.transpose()
 
 print("***Saving data...")
 np.savez(data_filename, data=data, window_size=window_size, dists=dists)
