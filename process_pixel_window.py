@@ -10,10 +10,15 @@ import numpy as np
 
 from osgeo import gdal
 
-window_size = 50 # Window that is 12 meters per side
+window_size = 250 # Window that is 12 meters per side
 
 data_filename = 'VIS_%spixels_windows.npz'%window_size
-results_filename = 'VIS_%spixels_results.npz'%window_size
+data_array = np.load(data_filename)
+data = data_array[data]
+window_size = data_array[window_size]
+
+dists_filename = 'VIS_%spixels_dists.npz'%window_size
+dists = np.load(dists_filename)
 
 np.savez(data_filename, data=data, window_size=window_size, dists=dists)
 
