@@ -2,4 +2,12 @@
 *.bak
 *~
 *.swp
-ChitwanABMrc
+*.pdf
+*.png
+*.shp
+*.dbf
+*.prj
+*.shx
+*.csv
+*.npz
+*.npy
