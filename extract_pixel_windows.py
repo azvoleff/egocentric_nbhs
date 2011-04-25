@@ -28,9 +28,9 @@ data_filename = 'VIS_%spixels_windows.npz'%window_size
 dists_filename = 'VIS_%spixels_dists.npy'%window_size
 
 if os.path.exists(data_filename):
-    raise IOError('File "%s" already exists. Must delete file to regenerate.'%data_filename)
+    raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
 if os.path.exists(dists_filename):
-    raise IOError('File "%s" already exists. Must delete file to regenerate.'%dists_filename)
+    raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%dists_filename)
 
 print("***Loading household coordinate data...")
 #ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
