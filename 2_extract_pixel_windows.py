@@ -17,7 +17,7 @@ from osgeo import gdal
 # determines the maximum buffer radius that can be considered.
 #window_size = 0 # Single 2.4m pixel
 #window_size = 2 # Window that is 12 meters per side
-window_size = 125 # Window that is 12 meters per side
+window_size = 500
 window_width = (window_size*2) + 1
 # Number of classes in the image. If the classes are not denoted by sequention 
 # numbers, the code will need to be modified where the 'classes' variable is 
@@ -33,8 +33,8 @@ if os.path.exists(dists_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%dists_filename)
 
 print("***Loading household coordinate data...")
-#ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-ds = gdal.Open("/media/G-Tech_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
+ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
+#ds = gdal.Open("/media/G-Tech_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
 #ds = gdal.Open("R:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
 #ds = gdal.Open("F:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
 cols = ds.RasterXSize
@@ -100,5 +100,4 @@ y_dist = x_dist.transpose()*np.abs(pixel_height)
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)
-#dists = np.tile(dists, (data.shape[2], 1, 1))
 np.save(dists_filename, dists)
