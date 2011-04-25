@@ -5,19 +5,18 @@
 
 require("plotrix")
 
-window_size <- 125
-max_dists <- seq(25, (window_size*2 + 1)*2.4, 25)
+window_size <- 50
 
 filename_base = paste('VIS_', window_size, 'pixels_results_', sep="")
 
 maxdists_filename = paste(filename_base, 'maxdists.csv', sep="")
-maxdists = read.table(maxdists_filename)
+max_dists = read.table(maxdists_filename)
 
 image_filename = paste(filename_base, 'mixingdiagram.pdf', sep="")
 
 pdf(file=image_filename)
-for (max_dist_index in 1:length(max_dists)) {
-    max_dist = max_dists[max_dist_index]
+for (max_dist_index in 1:nrow(max_dists)) {
+    max_dist = max_dists[max_dist_index, 1]
     data_filename = paste(filename_base, 'maxdist', max_dist, '.csv', sep="")
     VIS_matrix = read.table(data_filename)
     VIS_matrix[is.na(VIS_matrix)] <- 0
