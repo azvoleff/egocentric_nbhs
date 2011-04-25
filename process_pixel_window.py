@@ -10,7 +10,7 @@ import numpy as np
 
 from osgeo import gdal
 
-window_size = 50 # Window that is 12 meters per side
+window_size = 125 # Window that is 12 meters per side
 # The num_classes specifies how many classes are in the image data. Here it is 
 # set to 4, as there are 4 classes (V I and S plus a fourth class meaning 
 # undefined). The code assumes that classes are coded in the image data 
@@ -58,3 +58,7 @@ for n in xrange(num_classes):
     results[:,:,n] = (results[:,:,n] / area) * 100
 np.savez(results_filename, results=results, max_dists=max_dists,
         classes=classes, window_size=window_size)
+
+for n in xrange(len(max_dists)):
+    filename = 'VIS_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
+    np.savetxt(filename, results[:,n,:])
