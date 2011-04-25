@@ -17,7 +17,7 @@ from osgeo import gdal
 # determines the maximum buffer radius that can be considered.
 #window_size = 0 # Single 2.4m pixel
 #window_size = 2 # Window that is 12 meters per side
-window_size = 200 # Window that is 12 meters per side
+window_size = 50 # Window that is 12 meters per side
 window_width = (window_size*2) + 1
 # Number of classes in the image. If the classes are not denoted by sequention 
 # numbers, the code will need to be modified where the 'classes' variable is 
@@ -25,9 +25,12 @@ window_width = (window_size*2) + 1
 num_classes = 4 
 
 data_filename = 'VIS_%spixels_windows.npz'%window_size
+dists_filename = 'VIS_%spixels_dists.npz'%window_size
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Must delete file to regenerate.'%data_filename)
+if os.path.exists(dists_filename):
+    raise IOError('File "%s" already exists. Must delete file to regenerate.'%dists_filename)
 
 print("***Loading household coordinate data...")
 #ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
@@ -81,6 +84,7 @@ for hh_num in xrange(0, len(hh_coords.x)):
     lr_x, lr_y = center_x+window_size+1, center_y-window_size
     box = image[ul_x:lr_x, lr_y:ul_y]
     data[:,:,hh_num] = box
+np.savez(data_filename, data=data, window_size=window_size)
 
 print("\n***Calculating distance matrix...")
 # Calculate the distance matrix, storing in a matrix the distance of each cell 
@@ -96,7 +100,5 @@ y_dist = x_dist.transpose()*np.abs(pixel_height)
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)
-dists = np.tile(dists, (data.shape[2], 1, 1))
-
-print("***Saving data...")
-np.savez(data_filename, data=data, window_size=window_size, dists=dists)
+#dists = np.tile(dists, (data.shape[2], 1, 1))
+np.savez(dists_filename, window_size=window_size, dists=dists)
