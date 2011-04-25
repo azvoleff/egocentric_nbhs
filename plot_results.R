@@ -10,17 +10,18 @@ for (max_dist_index in 1:length(max_dists)) {
     data_filename = paste('VIS_', window_size, 'pixels_results_maxdist',
             max_dist, '.csv', sep="")
     image_filename = paste('VIS_', window_size, 'pixels_results_maxdist',
-            max_dist, '.pdf', sep="")
+            max_dist, '.png', sep="")
     VIS_matrix = read.table(data_filename)
+    VIS_matrix[is.na(VIS_matrix)] <- 0
     VIS_matrix = VIS_matrix/100
-    VIS_matrix[,1] = round(VIS_matrix[,1],1)
-    VIS_matrix[,2] = round(VIS_matrix[,2],1)
+    VIS_matrix[,1] = round(VIS_matrix[,1],5)
+    VIS_matrix[,2] = round(VIS_matrix[,2],5)
     VIS_matrix[,3] = 1 - VIS_matrix[,1]- VIS_matrix[,2]
     VIS_matrix[VIS_matrix<0] <- 0
 
-    pdf(file=image_filename)
+    png(file=image_filename)
     plot_title = paste(max_dist, "Meter Neighborhood Radius")
-    triax.plot(VIS_matrix, main=plot_title,
-               axis.labels=c("Vegetation (%)", "Soil (%)", "Impervious (%)"))
+    triax.plot(VIS_matrix, main=plot_title)
+#               axis.labels=c("Vegetation (%)", "Soil (%)", "Impervious (%)"))
     dev.off()
 }
