@@ -21,7 +21,7 @@ results_filename = 'VIS_%spixels_results.npz'%window_size
 # Disregard the percentage of cover that is undefined, which is coded as zero, 
 # so start the classes array from 1 rather than zero.
 classes = np.arange(1, num_classes+1)
-max_dists = np.arange(10, (window_size*2 + 1)*2.4, 50)
+max_dists = np.arange(25, (window_size*2 + 1)*2.4, 25)
 
 data_filename = 'VIS_%spixels_windows.npz'%window_size
 data_array = np.load(data_filename)
@@ -62,3 +62,8 @@ np.savez(results_filename, results=results, max_dists=max_dists,
 for n in xrange(len(max_dists)):
     filename = 'VIS_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
     np.savetxt(filename, results[:,n,:])
+
+filename = 'VIS_%ipixels_results_maxdists.csv'%window_size
+np.savetxt(filename, max_dists)
+filename = 'VIS_%ipixels_results_classes.csv'%window_size
+np.savetxt(filename, classes)
