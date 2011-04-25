@@ -32,8 +32,6 @@ dists_filename = 'VIS_%spixels_dists.npy'%window_size
 dists = np.load(dists_filename)
 dists = np.tile(dists, (data.shape[2], 1, 1)).transpose()
 
-np.savez(data_filename, data=data, window_size=window_size, dists=dists)
-
 print("***Running class calculations...")
 results = np.zeros((data.shape[2], len(max_dists), len(classes)))
 for max_dist_index in xrange(len(max_dists)):
@@ -45,9 +43,6 @@ for max_dist_index in xrange(len(max_dists)):
         these_results = np.sum(np.sum(masked == classes[class_index], 1), 0)
         results[:,max_dist_index, class_index] = these_results
 
-np.savez(results_filename+"_debug.npz", results=results, max_dists=max_dists,
-        classes=classes, window_size=window_size)
-
 # Now convert counts into percentages of the total area.
 # Format of results array:
 #     1st dimension: total
@@ -58,20 +53,8 @@ np.savez(results_filename+"_debug.npz", results=results, max_dists=max_dists,
 # Now tile the area so there is one area column for each class_index, allowing 
 # easy element-by-element division of results by area.shape to get percentage 
 # of each neighborhood in each class:
-#print "area.shape 1", area.shape
-#area = np.resize(area.shape, (area.shape[0], area.shape[1], 1))
-#print "area.shape 2", area.shape
-#area = np.repeat(area, num_classes, 2)
-#area = np.tile(area, num_classes)
-#print "area.shape 3", area.shape
-#print "results.shape", results.shape
 area = np.sum(results[:,:,:], 2) # Areas are expressed in pixels.
 for n in xrange(num_classes):
     results[:,:,n] = (results[:,:,n] / area) * 100
-print results[1, 0, :]
-print results[1, 1, :]
-print results[1, 2, :]
-print results[1, 3, :]
-print results[1, 4, :]
 np.savez(results_filename, results=results, max_dists=max_dists,
         classes=classes, window_size=window_size)
