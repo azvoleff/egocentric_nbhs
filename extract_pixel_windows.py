@@ -17,7 +17,7 @@ from osgeo import gdal
 # determines the maximum buffer radius that can be considered.
 #window_size = 0 # Single 2.4m pixel
 #window_size = 2 # Window that is 12 meters per side
-window_size = 50 # Window that is 12 meters per side
+window_size = 250 # Window that is 12 meters per side
 window_width = (window_size*2) + 1
 # Number of classes in the image. If the classes are not denoted by sequention 
 # numbers, the code will need to be modified where the 'classes' variable is 
@@ -25,7 +25,7 @@ window_width = (window_size*2) + 1
 num_classes = 4 
 
 data_filename = 'VIS_%spixels_windows.npz'%window_size
-dists_filename = 'VIS_%spixels_dists.npz'%window_size
+dists_filename = 'VIS_%spixels_dists.npy'%window_size
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Must delete file to regenerate.'%data_filename)
@@ -101,4 +101,4 @@ y_dist = x_dist.transpose()*np.abs(pixel_height)
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)
 #dists = np.tile(dists, (data.shape[2], 1, 1))
-np.savez(dists_filename, window_size=window_size, dists=dists)
+np.save(dists_filename, dists)
