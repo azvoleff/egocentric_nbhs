@@ -1,13 +1,13 @@
 #!/usr/bin/python
 
 # Used to extract a window of pixel around a each point in a set of points.
-# The image must be in a projected coordinate system.
+# The image must be in a projected coordinate system. This code must be run on 
+# a 64bit python installation to have enough memory if window_size is greater 
+# than about 125 pixels.
 
 import os
 
 import numpy as np
-
-from osgeo import gdal
 
 # Window size in pixels (2.4 meter pixels for QuickBird multispectral). The 
 # window size is the number of pixels included on each side of the center 
@@ -24,7 +24,7 @@ window_width = (window_size*2) + 1
 # setup towards the end of the code.
 num_classes = 4 
 
-data_filename = 'VIS_%spixels_windows.npz'%window_size
+data_filename = 'VIS_%spixels_windows.npy'%window_size
 dists_filename = 'VIS_%spixels_dists.npy'%window_size
 
 if os.path.exists(data_filename):
@@ -32,21 +32,16 @@ if os.path.exists(data_filename):
 if os.path.exists(dists_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%dists_filename)
 
-print("***Loading household coordinate data...")
-ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("/media/G-Tech_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("R:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("F:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-cols = ds.RasterXSize
-rows = ds.RasterYSize
-gt = ds.GetGeoTransform()
-# Format of ds.GetGeoTransform is:
-# (upper left x, x-size, rotation1, upper left y, rotation2, y-size)
-# upper left is the origin for GDAL
-origin_x = gt[0]
-origin_y = gt[3]
-pixel_width = gt[1]
-pixel_height = gt[5]
+print("***Loading image data...")
+image_export_filename = 'VIS_image.npz'
+image_data_array = np.load(image_export_filename)
+image = image_data_array['image']
+cols = image_data_array['cols']
+rows = image_data_array['rows']
+origin_x = image_data_array['origin_x']
+origin_y = image_data_array['origin_y']
+pixel_width = image_data_array['pixel_width']
+pixel_height = image_data_array['pixel_height']
 
 def convert_to_img_coords(x, y):
     img_x = int((x - origin_x)/pixel_width)
@@ -73,7 +68,6 @@ print("\tDropped %s households outside raster extent."%(initial_shape-final_shap
 print("***Extracting windows...")
 # Extract a window surrounding each household pixel, where the window has an 
 # edge length (in pixels) of: (window_size*2)*1.
-image = ds.ReadAsArray().transpose()
 data = np.zeros((window_width, window_width, len(hh_coords.x)), dtype='int8')
 for hh_num in xrange(0, len(hh_coords.x)):
     x = hh_coords.x[hh_num]
@@ -84,7 +78,7 @@ for hh_num in xrange(0, len(hh_coords.x)):
     lr_x, lr_y = center_x+window_size+1, center_y-window_size
     box = image[ul_x:lr_x, lr_y:ul_y]
     data[:,:,hh_num] = box
-np.savez(data_filename, data=data, window_size=window_size)
+np.save(data_filename, data)
 
 print("\n***Calculating distance matrix...")
 # Calculate the distance matrix, storing in a matrix the distance of each cell 

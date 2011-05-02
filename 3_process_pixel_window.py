@@ -8,9 +8,7 @@ import os
 
 import numpy as np
 
-from osgeo import gdal
-
-window_size = 250
+window_size = 500
 # The num_classes specifies how many classes are in the image data. Here it is 
 # set to 4, as there are 4 classes (V I and S plus a fourth class meaning 
 # undefined). The code assumes that classes are coded in the image data 
@@ -23,10 +21,8 @@ results_filename = 'VIS_%spixels_results.npz'%window_size
 classes = np.arange(1, num_classes+1)
 max_dists = np.arange(25, (window_size + 1)*2.4, 25)
 
-data_filename = 'VIS_%spixels_windows.npz'%window_size
-data_array = np.load(data_filename)
-data = data_array['data']
-window_size = data_array['window_size']
+data_filename = 'VIS_%spixels_windows.npy'%window_size
+data = np.load(data_filename)
 
 dists_filename = 'VIS_%spixels_dists.npy'%window_size
 dists = np.load(dists_filename)
