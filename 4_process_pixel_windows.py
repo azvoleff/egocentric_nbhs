@@ -8,25 +8,47 @@ import os
 
 import numpy as np
 
-data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+#data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+data_dir = 'F:/Data/Ghana/Ecocentric_NBH_Data/'
 
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
-min_buffer_radius = 25
-max_buffer_radius = 75
-buffer_radius_increment = 25
+min_buffer_radius = 50
+max_buffer_radius = 1000
+buffer_radius_increment = 50
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
 # buffer that can be considered (which in meters is equal to window_size * 
 # resolution). The max_buffer_radius specifies the maximum buffer size to 
 # consider in the calculations, whereas window_size tells the script which 
 # precalculated window data set to use.
-window_size = 50
+window_size = 500
 window_width = (window_size*2) + 1
 # Resolution is the resolution of the image in meters.
 resolution = 2.4
 
+###############################################################################
+# Uncomment these two lines to run on VIS image.
 base_filename = data_dir + 'VIS_%ipixels_'%window_size
+# For the VIS classification, 0 is unknown, 1 is veg, 2 is soil, and 3 is 
+# impervious.
+classes_text_names_prefix = 'QB2002_OBIA'
+classes_text_names = ["NA", "VEG", "SOIL", "IMPERVIOUS"]
+
+###############################################################################
+# Uncomment one of the two following sets of two lines to run on an NDVI image.
+# Note no class coding: for the NDVI thresholding, 0 is unknown, 1 is 
+# non-vegetation, and 2 is vegetation.
+#base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
+classes_text_names_prefix = 'QB2002_NDVI'
+#classes_text_names = ["NA", "NONVEG", "VEG"]
+
+#base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
+classes_text_names_prefix = 'QB2010_NDVI'
+#classes_text_names = ["NA", "NONVEG", "VEG"]
+
+###############################################################################
+# Main code starts here
 results_filename = base_filename + 'results.npz'
 
 data_filename = base_filename + 'windows.npy'
@@ -37,10 +59,6 @@ hh_data = np.loadtxt(hh_filename)
 
 max_buffer_radius_possible = window_size*resolution
 assert max_buffer_radius <= max_buffer_radius_possible, "max_buffer_radius with %s dataset cannot exceed %.2f meters"%(data_filename, max_buffer_radius_possible)
-
-classes_text_names = ["QB2002_OBIA_NA", "QB2002_OBIA_VEG", "QB2002_OBIA_IMPERVIOUS", "QB2002_OBIA_SOIL"]
-#classes_text_names = ["QB2002_NDVI_NA", "QB2002_NDVI_NONVEG", "QB2002_NDVI_VEG"]
-#classes_text_names = ["QB2010_NDVI_NA", "QB2010_NDVI_NONVEG", "QB2010_NDVI_VEG"]
 
 # The code assumes that classes are coded in the image data as
 # integers ranging from 0 (undefined) to the length of classes_text_names.
@@ -85,7 +103,7 @@ for max_dist_index in xrange(len(max_dists)):
         # TODO: could use np.apply_over_axes here
         these_results = np.sum(np.sum(masked == classes[class_index], 1), 0)
         results[:,max_dist_index, class_index] = these_results
-        column_headers.append("%i_%s"%(cur_max_dist, classes_text_names[class_index]))
+        column_headers.append("%s_%im_%s"%(classes_text_names_prefix, cur_max_dist, classes_text_names[class_index]))
 # Make column_headers a row vector
 column_headers = np.array(column_headers)
 
@@ -107,7 +125,7 @@ results_reshaped = results.reshape((results.shape[0], -1, 1))
 # Stack columns from household data so that HHIDs and (x, y) coordinates are 
 # available.
 hh_data = np.resize(hh_data, (hh_data.shape[0], hh_data.shape[1], 1))
-data = np.hstack((hh_data, results_reshaped))
+results_reshaped = np.hstack((hh_data, results_reshaped))
 
 # Write results to CSV for import into R, Stata, SPSS, SAS, etc.
 results_csv_filename = base_filename + 'results.csv'
@@ -116,16 +134,15 @@ try:
 except:
     raise IOError("Unable to open %s"%output_file)
 # Make and write the CSV file header:
-header = ''
-for column_header in column_headers:
+header = column_headers[0]
+for column_header in column_headers[1:]:
     header = header + ", " + column_header
 header = header + "\n"
 output_file_obj.write(header)
-# First convert them all to strings to get the proper precision
 for row_num in xrange(results_reshaped.shape[0]):
-    row = results_reshaped[row_num, :, :]
-    # Start with an integer as Plot_ID field needs no conversion
-    output_file_obj.write("%s"%row[0])
+    row = results_reshaped[row_num, :]
+    # Start with an integer as HHID field needs no conversion
+    output_file_obj.write("%i"%row[0])
     for item in row[1:]:
         output_file_obj.write(", %.10f"%float(item))
     output_file_obj.write("\n")
