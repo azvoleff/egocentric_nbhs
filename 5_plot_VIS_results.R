@@ -7,7 +7,9 @@ require("plotrix")
 
 window_size <- 50
 
-filename_base = paste('data/VIS_', window_size, 'pixels_results_', sep="")
+data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+
+filename_base = paste(data_dir, 'VIS_', window_size, 'pixels_results_', sep="")
 
 maxdists_filename = paste(filename_base, 'maxdists.csv', sep="")
 max_dists = read.table(maxdists_filename)

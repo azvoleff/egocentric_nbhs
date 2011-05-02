@@ -9,6 +9,8 @@ import os
 
 import numpy as np
 
+data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+
 # Window size in pixels (2.4 meter pixels for QuickBird multispectral). The 
 # window size is the number of pixels included on each side of the center 
 # pixel. So a window_size of one gives a square window that is 3 pixels per 
@@ -20,20 +22,17 @@ import numpy as np
 window_size = 500
 window_width = (window_size*2) + 1
 
-data_filename = 'data/VIS_%spixels_windows.npy'%window_size
-dists_filename = 'data/VIS_%spixels_dists.npy'%window_size
-data_filename = 'data/NDVI_%spixels_windows.npy'%window_size
-dists_filename = 'data/NDVI_%spixels_dists.npy'%window_size
+data_filename = data_dir + 'VIS_%spixels_windows.npy'%window_size
+dists_filename = data_dir + 'VIS_%spixels_dists.npy'%window_size
+data_filename = data_dir + 'NDVI_%spixels_windows.npy'%window_size
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
-if os.path.exists(dists_filename):
-    raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%dists_filename)
 
 print("***Loading image data...")
-image_export_filename = 'data/VIS_image.npz'
-#image_export_filename = 'data/Quickbird_2002_NDVI_thresholded.npz'
-#image_export_filename = 'data/Quickbird_2010_NDVI_thresholded.npz'
+image_export_filename = data_dir + 'VIS_image.npz'
+#image_export_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
+#image_export_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
 image_data_array = np.load(image_export_filename)
 image = image_data_array['image']
 cols = image_data_array['cols']

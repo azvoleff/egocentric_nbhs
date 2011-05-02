@@ -8,9 +8,12 @@ import os
 
 import numpy as np
 
-# Here window_size is is meters - the maximum size of the buffer to be 
-# considered.
-window_size = 500
+data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+
+# Here window_size is in PIXELS not meters. So it is the maximum diameter 
+# buffer that can be considered (which in meters is equal to window_size * 
+# resolution).
+window_size = 125
 
 # Resolution is the resolution of the image in meters.
 resolution = 2.4
@@ -20,7 +23,7 @@ resolution = 2.4
 # undefined). The code assumes that classes are coded in the image data 
 # integers ranging from 0 (undefined) to num_classes-1.
 num_classes = 3
-base_filename = 'data/NDVI_%ipixels_'%window_size
+base_filename = data_dir + 'VIS_%ipixels_'%window_size
 
 results_filename = base_filename + 'results.npz'
 
@@ -31,6 +34,10 @@ max_dists = np.arange(25, (window_size + 1)*resolution, 25)
 
 data_filename = base_filename + '%windows.npy'
 data = np.load(data_filename)
+
+print data.shape
+
+shape[0]
 
 print("\n***Calculating distance matrix...")
 # Calculate the distance matrix, storing in a matrix the distance of each cell 
