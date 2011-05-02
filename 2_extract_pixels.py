@@ -19,7 +19,7 @@ from osgeo import gdal
 #window_size = 0 # Single 2.4m pixel
 #window_size = 2 # Window that is 12 meters per side
 
-image_export_filename = 'VIS_image.npz'
+image_export_filename = 'data/VIS_image.npz'
 
 if os.path.exists(image_export_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%image_export_filename)

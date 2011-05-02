@@ -24,8 +24,8 @@ window_width = (window_size*2) + 1
 # setup towards the end of the code.
 num_classes = 4 
 
-data_filename = 'VIS_%spixels_windows.npy'%window_size
-dists_filename = 'VIS_%spixels_dists.npy'%window_size
+data_filename = 'data/VIS_%spixels_windows.npy'%window_size
+dists_filename = 'data/VIS_%spixels_dists.npy'%window_size
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
@@ -33,7 +33,7 @@ if os.path.exists(dists_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%dists_filename)
 
 print("***Loading image data...")
-image_export_filename = 'VIS_image.npz'
+image_export_filename = 'data/VIS_image.npz'
 image_data_array = np.load(image_export_filename)
 image = image_data_array['image']
 cols = image_data_array['cols']

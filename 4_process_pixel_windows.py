@@ -14,17 +14,17 @@ window_size = 500
 # undefined). The code assumes that classes are coded in the image data 
 # integers ranging from 0 (undefined) to num_classes-1.
 num_classes = 3
-results_filename = 'VIS_%spixels_results.npz'%window_size
+results_filename = 'data/VIS_%spixels_results.npz'%window_size
 
 # Disregard the percentage of cover that is undefined, which is coded as zero, 
 # so start the classes array from 1 rather than zero.
 classes = np.arange(1, num_classes+1)
 max_dists = np.arange(25, (window_size + 1)*2.4, 25)
 
-data_filename = 'VIS_%spixels_windows.npy'%window_size
+data_filename = 'data/VIS_%spixels_windows.npy'%window_size
 data = np.load(data_filename)
 
-dists_filename = 'VIS_%spixels_dists.npy'%window_size
+dists_filename = 'data/VIS_%spixels_dists.npy'%window_size
 dists = np.load(dists_filename)
 # Add a third dimension to the dists matrix (so it is window_size x window_size 
 # x 1), so that it can be used as a mask with the 3 dimensional data matrix.
@@ -57,10 +57,10 @@ np.savez(results_filename, results=results, max_dists=max_dists,
         classes=classes, window_size=window_size)
 
 for n in xrange(len(max_dists)):
-    filename = 'VIS_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
+    filename = 'data/VIS_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
     np.savetxt(filename, results[:,n,:])
 
-filename = 'VIS_%ipixels_results_maxdists.csv'%window_size
+filename = 'data/VIS_%ipixels_results_maxdists.csv'%window_size
 np.savetxt(filename, max_dists)
-filename = 'VIS_%ipixels_results_classes.csv'%window_size
+filename = 'data/VIS_%ipixels_results_classes.csv'%window_size
 np.savetxt(filename, classes)
