@@ -10,34 +10,39 @@ import numpy as np
 
 data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
 
+# max_buffer_radius species the maximum buffer size to consider (in meters) by 
+# specifying the maximum buffer radius.
+max_buffer_radius = 100
+
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
 # buffer that can be considered (which in meters is equal to window_size * 
-# resolution).
-window_size = 125
-
+# resolution). The max_buffer_radius specifies the maximum buffer size to 
+# consider in the calculations, whereas window_size tells the script which 
+# precalculated window data set to use.
+window_size = 50
+window_width = (window_size*2) + 1
 # Resolution is the resolution of the image in meters.
 resolution = 2.4
+
+base_filename = data_dir + 'VIS_%ipixels_'%window_size
+results_filename = base_filename + 'results.npz'
+
+data_filename = base_filename + 'windows.npy'
+data = np.load(data_filename)
+
+max_buffer_radius_possible = window_size*resolution
+assert max_buffer_radius <= max_buffer_radius_possible, "max_buffer_radius with %s dataset cannot exceed %.2f meters"%(data_filename, max_buffer_radius_possible)
 
 # The num_classes specifies how many classes are in the image data. Here it is 
 # set to 4, as there are 4 classes (V I and S plus a fourth class meaning 
 # undefined). The code assumes that classes are coded in the image data 
 # integers ranging from 0 (undefined) to num_classes-1.
 num_classes = 3
-base_filename = data_dir + 'VIS_%ipixels_'%window_size
-
-results_filename = base_filename + 'results.npz'
 
 # Disregard the percentage of cover that is undefined, which is coded as zero, 
 # so start the classes array from 1 rather than zero.
 classes = np.arange(1, num_classes+1)
-max_dists = np.arange(25, (window_size + 1)*resolution, 25)
-
-data_filename = base_filename + '%windows.npy'
-data = np.load(data_filename)
-
-print data.shape
-
-shape[0]
+max_dists = np.arange(25, max_buffer_radius, 25)
 
 print("\n***Calculating distance matrix...")
 # Calculate the distance matrix, storing in a matrix the distance of each cell 
