@@ -22,6 +22,8 @@ window_width = (window_size*2) + 1
 
 data_filename = 'data/VIS_%spixels_windows.npy'%window_size
 dists_filename = 'data/VIS_%spixels_dists.npy'%window_size
+data_filename = 'data/NDVI_%spixels_windows.npy'%window_size
+dists_filename = 'data/NDVI_%spixels_dists.npy'%window_size
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
@@ -30,6 +32,8 @@ if os.path.exists(dists_filename):
 
 print("***Loading image data...")
 image_export_filename = 'data/VIS_image.npz'
+#image_export_filename = 'data/Quickbird_2002_NDVI_thresholded.npz'
+#image_export_filename = 'data/Quickbird_2010_NDVI_thresholded.npz'
 image_data_array = np.load(image_export_filename)
 image = image_data_array['image']
 cols = image_data_array['cols']
@@ -75,19 +79,3 @@ for hh_num in xrange(0, len(hh_coords.x)):
     box = image[ul_x:lr_x, lr_y:ul_y]
     data[:,:,hh_num] = box
 np.save(data_filename, data)
-
-print("\n***Calculating distance matrix...")
-# Calculate the distance matrix, storing in a matrix the distance of each cell 
-# from the center point of the matrix (where the matrix is a square matrix with 
-# (window_size*2)*1 rows and columns). The distances in the matrix are 
-# expressed directly in distance by multiplying by the resolution of the raster 
-# (this converts the distances from being expressed in number of pixels to 
-# number of meters).
-x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
-# Convert to meters
-x_dist = x_dist * np.abs(pixel_width)
-y_dist = x_dist.transpose()*np.abs(pixel_height)
-# Use the distance formula (where the center point has a (x,y) location of 
-# (0,0):
-dists = np.sqrt(x_dist**2+y_dist**2)
-np.save(dists_filename, dists)
