@@ -17,23 +17,22 @@ data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
 # size. For a 12 meter window on QuickBird multispectral data, use a window 
 # size of 2 (giving a window that is 5 pixels per side). The window size 
 # determines the maximum buffer radius that can be considered.
-#window_size = 0 # Single 2.4m pixel
-#window_size = 2 # Window that is 12 meters per side
-window_size = 500
+window_size = 50
 window_width = (window_size*2) + 1
 
-data_filename = data_dir + 'VIS_%spixels_windows.npy'%window_size
-dists_filename = data_dir + 'VIS_%spixels_dists.npy'%window_size
-data_filename = data_dir + 'NDVI_%spixels_windows.npy'%window_size
+image_filename = data_dir + 'VIS_image.npz'
+data_filename = data_dir + 'VIS_%ipixels_windows.npy'%window_size
+#image_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
+#data_filename = data_dir + 'Quickbird_2002_NDVI_thresholded_%ipixels_windows.npy'%window_size
+#image_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
+#data_filename = data_dir + 'Quickbird_2010_NDVI_thresholded_%ipixels_windows.npy'%window_size
+
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
 
 print("***Loading image data...")
-image_export_filename = data_dir + 'VIS_image.npz'
-#image_export_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
-#image_export_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
-image_data_array = np.load(image_export_filename)
+image_data_array = np.load(image_filename)
 image = image_data_array['image']
 cols = image_data_array['cols']
 rows = image_data_array['rows']
@@ -47,7 +46,7 @@ def convert_to_img_coords(x, y):
     img_y = int((y - origin_y)/pixel_height)
     return img_x, img_y
 
-hh_coords = np.recfromcsv("WHSA_hh_UTM30.csv")
+hh_coords = np.recfromcsv(data_dir + "WHSA_hh_UTM30.csv")
 # TODO: Fix this. For now drop all hh where their coords are outside the raster 
 # boundary, or where their coords are close enough to the raster boundary that 
 # any part of a window_size sized window would fall outside the raster 

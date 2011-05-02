@@ -8,6 +8,8 @@ import numpy as np
 
 from osgeo import gdal
 
+data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+
 ###############################################################################
 # Accra VIS Imagery
 ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_VIS/Ghana_VIS_masked_geotiff.tif")
