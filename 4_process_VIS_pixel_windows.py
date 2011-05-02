@@ -8,7 +8,13 @@ import os
 
 import numpy as np
 
+# Here window_size is is meters - the maximum size of the buffer to be 
+# considered.
 window_size = 500
+
+# Resolution is the resolution of the image in meters.
+resolution = 4
+
 # The num_classes specifies how many classes are in the image data. Here it is 
 # set to 4, as there are 4 classes (V I and S plus a fourth class meaning 
 # undefined). The code assumes that classes are coded in the image data 
@@ -33,8 +39,8 @@ print("\n***Calculating distance matrix...")
 # number of meters).
 x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
 # Convert to meters
-x_dist = x_dist * np.abs(pixel_width)
-y_dist = x_dist.transpose()*np.abs(pixel_height)
+x_dist = x_dist * np.abs(resolution)
+y_dist = x_dist.transpose()*np.abs(resolution)
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)

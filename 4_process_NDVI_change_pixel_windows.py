@@ -8,20 +8,21 @@ import os
 
 import numpy as np
 
+# Here window_size is is meters - the maximum size of the buffer to be 
+# considered.
 window_size = 500
-# The num_classes specifies how many classes are in the image data. Here it is 
-# set to 4, as there are 4 classes (V I and S plus a fourth class meaning 
-# undefined). The code assumes that classes are coded in the image data 
-# integers ranging from 0 (undefined) to num_classes-1.
-num_classes = 3
-results_filename = 'data/VIS_%spixels_results.npz'%window_size
+
+# Resolution is the resolution of the image in meters.
+resolution = 4
+
+results_filename = 'data/NDVI_%spixels_results.npz'%window_size
 
 # Disregard the percentage of cover that is undefined, which is coded as zero, 
 # so start the classes array from 1 rather than zero.
 classes = np.arange(1, num_classes+1)
 max_dists = np.arange(25, (window_size + 1)*2.4, 25)
 
-data_filename = 'data/VIS_%spixels_windows.npy'%window_size
+data_filename = 'data/NDVI_%spixels_windows.npy'%window_size
 data = np.load(data_filename)
 
 print("\n***Calculating distance matrix...")
@@ -33,8 +34,8 @@ print("\n***Calculating distance matrix...")
 # number of meters).
 x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
 # Convert to meters
-x_dist = x_dist * np.abs(pixel_width)
-y_dist = x_dist.transpose()*np.abs(pixel_height)
+x_dist = x_dist * np.abs(resolution)
+y_dist = x_dist.transpose()*np.abs(resolution)
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)
@@ -42,7 +43,7 @@ dists = np.sqrt(x_dist**2+y_dist**2)
 # x 1), so that it can be used as a mask with the 3 dimensional data matrix.
 dists = np.resize(dists, (dists.shape[0], dists.shape[1], 1))
 
-print("***Running class calculations...")
+print("***Running percentage vegetation calculations...")
 results = np.zeros((data.shape[2], len(max_dists), len(classes)))
 masked = np.zeros((dists.shape[0], dists.shape[1], data.shape[2]), dtype="bool")
 for max_dist_index in xrange(len(max_dists)):
@@ -69,10 +70,10 @@ np.savez(results_filename, results=results, max_dists=max_dists,
         classes=classes, window_size=window_size)
 
 for n in xrange(len(max_dists)):
-    filename = 'data/VIS_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
+    filename = 'data/NDVI_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
     np.savetxt(filename, results[:,n,:])
 
-filename = 'data/VIS_%ipixels_results_maxdists.csv'%window_size
+filename = 'data/NDVI_%ipixels_results_maxdists.csv'%window_size
 np.savetxt(filename, max_dists)
-filename = 'data/VIS_%ipixels_results_classes.csv'%window_size
+filename = 'data/NDVI_%ipixels_results_classes.csv'%window_size
 np.savetxt(filename, classes)
