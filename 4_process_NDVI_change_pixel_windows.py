@@ -13,14 +13,19 @@ import numpy as np
 window_size = 500
 
 # Resolution is the resolution of the image in meters.
-resolution = 4
+resolution = 2.4
 
+# The num_classes specifies how many classes are in the image data. Here it is 
+# set to 4, as there are 4 classes (V I and S plus a fourth class meaning 
+# undefined). The code assumes that classes are coded in the image data 
+# integers ranging from 0 (undefined) to num_classes-1.
+num_classes = 3
 results_filename = 'data/NDVI_%spixels_results.npz'%window_size
 
 # Disregard the percentage of cover that is undefined, which is coded as zero, 
 # so start the classes array from 1 rather than zero.
 classes = np.arange(1, num_classes+1)
-max_dists = np.arange(25, (window_size + 1)*2.4, 25)
+max_dists = np.arange(25, (window_size + 1)*resolution, 25)
 
 data_filename = 'data/NDVI_%spixels_windows.npy'%window_size
 data = np.load(data_filename)
@@ -43,13 +48,12 @@ dists = np.sqrt(x_dist**2+y_dist**2)
 # x 1), so that it can be used as a mask with the 3 dimensional data matrix.
 dists = np.resize(dists, (dists.shape[0], dists.shape[1], 1))
 
-print("***Running percentage vegetation calculations...")
+print("***Running class calculations...")
 results = np.zeros((data.shape[2], len(max_dists), len(classes)))
 masked = np.zeros((dists.shape[0], dists.shape[1], data.shape[2]), dtype="bool")
 for max_dist_index in xrange(len(max_dists)):
     print("Current dist: %s"%max_dists[max_dist_index])
     masked = (dists < max_dists[max_dist_index]) * data
-
     for class_index in xrange(len(classes)):
         print("\t\tClass: %s"%classes[class_index])
         # TODO: could use np.apply_over_axes here
