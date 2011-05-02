@@ -10,16 +10,6 @@ import numpy as np
 
 from osgeo import gdal
 
-# Window size in pixels (2.4 meter pixels for QuickBird multispectral). The 
-# window size is the number of pixels included on each side of the center 
-# pixel. So a window_size of one gives a square window that is 3 pixels per 
-# size. For a 12 meter window on QuickBird multispectral data, use a window 
-# size of 2 (giving a window that is 5 pixels per side). The window size 
-# determines the maximum buffer radius that can be considered.
-#window_size = 0 # Single 2.4m pixel
-#window_size = 2 # Window that is 12 meters per side
-
-
 ###############################################################################
 # Accra VIS Imagery
 #ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
@@ -31,10 +21,10 @@ from osgeo import gdal
 
 ###############################################################################
 # Accra NDVI images
-ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb02_ndvi_ge120_v02.tif")
-image_export_filename = 'data/Quickbird_2002_NDVI_thresholded.npz'
-#ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb10_ndvi_ge120_v02.tif")
-#image_export_filename = 'data/Quickbird_2010_NDVI_thresholded.npz'
+#ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb02_ndvi_ge120_v02.tif")
+#image_export_filename = 'data/Quickbird_2002_NDVI_thresholded.npz'
+ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb10_ndvi_ge120_v02.tif")
+image_export_filename = 'data/Quickbird_2010_NDVI_thresholded.npz'
 
 ###############################################################################
 # Image processing code (to save image as a numpy array) starts below.
