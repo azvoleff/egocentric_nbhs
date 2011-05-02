@@ -1,8 +1,6 @@
 #!/usr/bin/python
-# Used to extract a window of pixel around a each point in a set of points.
-# The image must be in a projected coordinate system. Thhis code must be run on 
-# a 64bit python installation to have enough memory if window_size is greater 
-# than about 125 pixels.
+# Uses GDAL to convert a geotiff image to a numpy array for later processing to 
+# choose a window of pixels around each of the WHSA surveyed households.
 
 import os
 
