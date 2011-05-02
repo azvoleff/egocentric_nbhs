@@ -12,19 +12,19 @@ from osgeo import gdal
 
 ###############################################################################
 # Accra VIS Imagery
-#ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("/media/G-Tech_Data/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("R:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("F:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#ds = gdal.Open("P:/Data/Imagery/Ghana/VIS/Ghana_VIS_masked_geotiff.tif")
-#image_export_filename = 'data/VIS_image.npz'
+ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_VIS/Ghana_VIS_masked_geotiff.tif")
+#ds = gdal.Open("/media/G-Tech_Data/Data/Imagery/Ghana/Accra_VIS/Ghana_VIS_masked_geotiff.tif")
+#ds = gdal.Open("R:/Data/Imagery/Ghana/Accra_VIS/Ghana_VIS_masked_geotiff.tif")
+#ds = gdal.Open("F:/Data/Imagery/Ghana/Accra_VIS/Ghana_VIS_masked_geotiff.tif")
+#ds = gdal.Open("P:/Data/Imagery/Ghana/Accra_VIS/Ghana_VIS_masked_geotiff.tif")
+image_export_filename = 'data/VIS_image.npz'
 
 ###############################################################################
 # Accra NDVI images
 #ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb02_ndvi_ge120_v02.tif")
 #image_export_filename = 'data/Quickbird_2002_NDVI_thresholded.npz'
-ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb10_ndvi_ge120_v02.tif")
-image_export_filename = 'data/Quickbird_2010_NDVI_thresholded.npz'
+#ds = gdal.Open("/media/Orange_Data/Data/Imagery/Ghana/Accra_NDVI/cloud_masked_qb10_ndvi_ge120_v02.tif")
+#image_export_filename = 'data/Quickbird_2010_NDVI_thresholded.npz'
 
 ###############################################################################
 # Image processing code (to save image as a numpy array) starts below.
