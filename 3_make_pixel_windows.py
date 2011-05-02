@@ -9,7 +9,8 @@ import os
 
 import numpy as np
 
-data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+#data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+data_dir = 'F:/Data/Ghana/Ecocentric_NBH_Data/'
 
 # Window size in pixels (2.4 meter pixels for QuickBird multispectral). The 
 # window size is the number of pixels included on each side of the center 
@@ -17,20 +18,26 @@ data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
 # size. For a 12 meter window on QuickBird multispectral data, use a window 
 # size of 2 (giving a window that is 5 pixels per side). The window size 
 # determines the maximum buffer radius that can be considered.
-window_size = 50
+window_size = 500
 window_width = (window_size*2) + 1
 
-image_filename = data_dir + 'VIS_image.npz'
+###############################################################################
+# Uncomment these two lines to run on VIS image.
+#base_filename = data_dir + 'VIS_%ipixels_'%window_size
+#image_filename = data_dir + 'VIS_image.npz'
 
-base_filename = data_dir + 'VIS_%ipixels_'%window_size
+###############################################################################
+# Uncomment one of the two following sets of two lines to run on an NDVI image.
+base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
+image_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
 
+#base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
+#image_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
+
+###############################################################################
+# Main code starts here
 data_filename = base_filename + 'windows.npy'
 hh_filename = base_filename + 'hh.npy'
-
-#image_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
-#data_filename = data_dir + 'Quickbird_2002_NDVI_thresholded_%ipixels_windows.npy'%window_size
-#image_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
-#data_filename = data_dir + 'Quickbird_2010_NDVI_thresholded_%ipixels_windows.npy'%window_size
 
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
@@ -47,22 +54,28 @@ origin_y = image_data_array['origin_y']
 pixel_width = image_data_array['pixel_width']
 pixel_height = image_data_array['pixel_height']
 
+# To allow the buffers to "run-off the page" where households are close to the 
+# sides of the image, pad the array on top, bottom, left, and right with zeros 
+# to expand it so that household buffers will not run off the page.
+vert_padding = np.zeros((window_size, image.shape[1]))
+image = np.vstack((vert_padding, image, vert_padding))
+horiz_padding = np.zeros((image.shape[0], window_size))
+image = np.hstack((horiz_padding, image, horiz_padding))
+
 def convert_to_img_coords(x, y):
+    # Need to correct here for the zero padding added to the matrix.
     img_x = int((x - origin_x)/pixel_width)
     img_y = int((y - origin_y)/pixel_height)
     return img_x, img_y
 
 hh_coords = np.recfromcsv(data_dir + "WHSA_hh_UTM30.csv")
-# TODO: Fix this. For now drop all hh where their coords are outside the raster 
-# boundary, or where their coords are close enough to the raster boundary that 
-# any part of a window_size sized window would fall outside the raster 
-# boundary.
+# Drop all hh where their coords are outside the raster boundary.
 lower_right_x = origin_x + cols * pixel_width
 lower_right_y = origin_y + rows * pixel_height
-min_x = origin_x + window_size * pixel_width
-max_x = lower_right_x - (window_size + 1) * pixel_width
-max_y = origin_y - (window_size + 1) * np.abs(pixel_height)
-min_y = lower_right_y + window_size * np.abs(pixel_height)
+min_x = origin_x
+max_x = lower_right_x
+max_y = origin_y
+min_y = lower_right_y
 initial_shape = hh_coords.shape[0]
 hh_coords = hh_coords[(hh_coords.x > min_x) & (hh_coords.x < max_x),]
 hh_coords = hh_coords[(hh_coords.y > min_y) & (hh_coords.y < max_y),]
@@ -74,7 +87,7 @@ print("***Extracting windows...")
 # Extract a window surrounding each household pixel, where the window has an 
 # edge length (in pixels) of: (window_size*2)*1.
 data = np.zeros((window_width, window_width, len(hh_coords.x)), dtype='int8')
-for hh_num in xrange(0, len(hh_coords.x)):
+for hh_num in xrange(len(hh_coords.x)):
     x = hh_coords.x[hh_num]
     y = hh_coords.y[hh_num]
     center_x, center_y = convert_to_img_coords(x, y)
