@@ -20,14 +20,16 @@ resolution = 2.4
 # undefined). The code assumes that classes are coded in the image data 
 # integers ranging from 0 (undefined) to num_classes-1.
 num_classes = 3
-results_filename = 'data/NDVI_%spixels_results.npz'%window_size
+base_filename = 'data/NDVI_%ipixels_'%window_size
+
+results_filename = base_filename + 'results.npz'
 
 # Disregard the percentage of cover that is undefined, which is coded as zero, 
 # so start the classes array from 1 rather than zero.
 classes = np.arange(1, num_classes+1)
 max_dists = np.arange(25, (window_size + 1)*resolution, 25)
 
-data_filename = 'data/NDVI_%spixels_windows.npy'%window_size
+data_filename = base_filename + '%windows.npy'
 data = np.load(data_filename)
 
 print("\n***Calculating distance matrix...")
@@ -74,10 +76,10 @@ np.savez(results_filename, results=results, max_dists=max_dists,
         classes=classes, window_size=window_size)
 
 for n in xrange(len(max_dists)):
-    filename = 'data/NDVI_%ipixels_results_maxdist%i.csv'%(window_size, max_dists[n])
+    filename = base_filename + 'results_maxdist%i.csv'%max_dists[n]
     np.savetxt(filename, results[:,n,:])
 
-filename = 'data/NDVI_%ipixels_results_maxdists.csv'%window_size
+filename = base_filename + 'results_maxdists.csv'
 np.savetxt(filename, max_dists)
-filename = 'data/NDVI_%ipixels_results_classes.csv'%window_size
+filename = base_filename + 'results_classes.csv'
 np.savetxt(filename, classes)
