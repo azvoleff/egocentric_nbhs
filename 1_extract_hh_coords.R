@@ -1,5 +1,8 @@
 #!/usr/bin/Rscript
 
+# Reads and outputs the coordinates of each WHSA household to both a shapefile 
+# and to a csv.
+
 require("ggplot2")
 require("rgdal")
 theme_update(theme_grey(base_size=18))

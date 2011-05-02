@@ -19,10 +19,6 @@ import numpy as np
 #window_size = 2 # Window that is 12 meters per side
 window_size = 500
 window_width = (window_size*2) + 1
-# Number of classes in the image. If the classes are not denoted by sequention 
-# numbers, the code will need to be modified where the 'classes' variable is 
-# setup towards the end of the code.
-num_classes = 4 
 
 data_filename = 'data/VIS_%spixels_windows.npy'%window_size
 dists_filename = 'data/VIS_%spixels_dists.npy'%window_size
