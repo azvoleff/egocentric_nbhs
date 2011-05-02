@@ -21,15 +21,21 @@ window_size = 50
 window_width = (window_size*2) + 1
 
 image_filename = data_dir + 'VIS_image.npz'
-data_filename = data_dir + 'VIS_%ipixels_windows.npy'%window_size
+
+base_filename = data_dir + 'VIS_%ipixels_'%window_size
+
+data_filename = base_filename + 'windows.npy'
+hh_filename = base_filename + 'hh.npy'
+
 #image_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
 #data_filename = data_dir + 'Quickbird_2002_NDVI_thresholded_%ipixels_windows.npy'%window_size
 #image_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
 #data_filename = data_dir + 'Quickbird_2010_NDVI_thresholded_%ipixels_windows.npy'%window_size
 
-
 if os.path.exists(data_filename):
     raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%data_filename)
+if os.path.exists(hh_filename):
+    raise IOError('File "%s" already exists. Manually delete file to have script regenerate it.'%hh_filename)
 
 print("***Loading image data...")
 image_data_array = np.load(image_filename)
@@ -61,6 +67,7 @@ initial_shape = hh_coords.shape[0]
 hh_coords = hh_coords[(hh_coords.x > min_x) & (hh_coords.x < max_x),]
 hh_coords = hh_coords[(hh_coords.y > min_y) & (hh_coords.y < max_y),]
 final_shape = hh_coords.shape[0]
+np.savetxt(hh_filename, hh_coords, fmt=['%s', '%f', '%f'])
 print("\tDropped %s households outside raster extent."%(initial_shape-final_shape))
 
 print("***Extracting windows...")
