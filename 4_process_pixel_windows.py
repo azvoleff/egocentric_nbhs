@@ -136,7 +136,7 @@ except:
 # Make and write the CSV file header:
 header = column_headers[0]
 for column_header in column_headers[1:]:
-    header = header + ", " + column_header
+    header = header + "," + column_header
 header = header + "\n"
 output_file_obj.write(header)
 for row_num in xrange(results_reshaped.shape[0]):
@@ -144,6 +144,6 @@ for row_num in xrange(results_reshaped.shape[0]):
     # Start with an integer as HHID field needs no conversion
     output_file_obj.write("%i"%row[0])
     for item in row[1:]:
-        output_file_obj.write(", %.10f"%float(item))
+        output_file_obj.write(",%.10f"%float(item))
     output_file_obj.write("\n")
 output_file_obj.close()
