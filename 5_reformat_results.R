@@ -60,4 +60,4 @@ merged_results_CSV_file <- paste(data_dir, 'merged_buffer_results.csv', sep="")
 merged_results_Rdata_file <- paste(data_dir, 'merged_buffer_results.Rdata', sep="")
 
 write.csv(merged_results, merged_results_CSV_file, row.names=F)
-save(merged_results, filename=merged_results_Rdata_file, row.names=F)
+save(merged_results, file=merged_results_Rdata_file)
