@@ -9,13 +9,14 @@ import os
 import numpy as np
 
 #data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
-data_dir = 'F:/Data/Ghana/Ecocentric_NBH_Data/'
+#data_dir = 'F:/Data/Ghana/Ecocentric_NBH_Data/'
+data_dir = 'Z:/Ecocentric_NBHs_Data/'
 
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
 min_buffer_radius = 50
 max_buffer_radius = 1000
-buffer_radius_increment = 50
+buffer_radius_increment = 25
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
 # buffer that can be considered (which in meters is equal to window_size * 
@@ -29,22 +30,22 @@ resolution = 2.4
 
 ###############################################################################
 # Uncomment these two lines to run on VIS image.
-base_filename = data_dir + 'VIS_%ipixels_'%window_size
+#base_filename = data_dir + 'VIS_%ipixels_'%window_size
 # For the VIS classification, 0 is unknown, 1 is veg, 2 is soil, and 3 is 
 # impervious.
-classes_text_names_prefix = 'QB2002_OBIA'
-classes_text_names = ["NA", "VEG", "SOIL", "IMPERVIOUS"]
+#classes_text_names_prefix = 'QB2002_OBIA'
+#classes_text_names = ["NA", "VEG", "SOIL", "IMPERVIOUS"]
 
 ###############################################################################
 # Uncomment one of the two following sets of two lines to run on an NDVI image.
 # Note no class coding: for the NDVI thresholding, 0 is unknown, 1 is 
 # non-vegetation, and 2 is vegetation.
-#base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
+base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
 classes_text_names_prefix = 'QB2002_NDVI'
-#classes_text_names = ["NA", "NONVEG", "VEG"]
+classes_text_names = ["NA", "NONVEG", "VEG"]
 
 #base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
-classes_text_names_prefix = 'QB2010_NDVI'
+#classes_text_names_prefix = 'QB2010_NDVI'
 #classes_text_names = ["NA", "NONVEG", "VEG"]
 
 ###############################################################################
