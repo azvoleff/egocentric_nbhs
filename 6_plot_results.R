@@ -12,8 +12,8 @@ dradius <- 25
 radii <- seq(min_radius, max_radius, dradius)
 
 classes <- c('NA', 'NONVEG', 'VEG')
-#col_prefix <- 'QB2002_NDVI_'
-col_prefix <- 'QB2010_NDVI_'
+col_prefix <- 'QB2002_NDVI_'
+#col_prefix <- 'QB2010_NDVI_'
 
 #classes <- c('VEG', 'SOIL', 'IMPERVIOUS')
 #col_prefix <- 'QB2002_OBIA_'
@@ -47,7 +47,7 @@ for (radius in radii) {
 
     plot_title <- paste(radius, "m radius (", area_hectares, " hectares)", sep="")
     # NOTE: mar format: c(bottom, left, top, right)
-    triax.plot(prop_matrix, main=plot_title, sub="test", show.grid=TRUE,
+    triax.plot(prop_matrix, main=plot_title, show.grid=TRUE,
             axis.labels=classes, mar=c(4, 0, 1, 0))
 }
 dev.off()
