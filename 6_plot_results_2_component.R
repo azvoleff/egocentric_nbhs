@@ -20,8 +20,8 @@ classes <- c('NONVEG', 'VEG')
 #col_prefix <- 'QB2002_NDVI_'
 col_prefix <- 'QB2010_NDVI_'
 
-#data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
-data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/20110503_100-to-1000-by-25m/'
+#data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/20110503_100-to-1000-by-25m/'
 
 load(paste(data_dir, 'merged_buffer_results.Rdata', sep=""))
 

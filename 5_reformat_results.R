@@ -3,8 +3,8 @@
 # Reads and outputs the coordinates of each WHSA household to both a shapefile 
 # and to a csv.
 
-#data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
-data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/20110503_100-to-1000-by-25m/'
+#data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/20110503_100-to-1000-by-25m/'
 
 window_size <- 500
 

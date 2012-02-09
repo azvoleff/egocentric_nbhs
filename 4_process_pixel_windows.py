@@ -8,9 +8,9 @@ import os
 
 import numpy as np
 
-#data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
-#data_dir = 'F:/Data/Ghana/Ecocentric_NBH_Data/'
-data_dir = 'Z:/Ecocentric_NBHs_Data/'
+#data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+#data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'Z:/Egocentric_NBHs_Data/'
 
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
@@ -76,7 +76,7 @@ print("***Calculating distance matrix...")
 x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
 # Convert to meters
 x_dist = x_dist * np.abs(resolution)
-y_dist = x_dist.transpose()*np.abs(resolution)
+y_dist = x_dist.transpose() * np.abs(resolution)
 # Use the distance formula (where the center point has a (x,y) location of 
 # (0,0):
 dists = np.sqrt(x_dist**2+y_dist**2)

@@ -8,7 +8,7 @@ import numpy as np
 
 from osgeo import gdal
 
-data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
 
 ###############################################################################
 # Accra VIS Imagery

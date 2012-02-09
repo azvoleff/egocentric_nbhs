@@ -13,13 +13,20 @@ HEIGHT <- 5.67
 theme_update(theme_grey(base_size=16))
 
 # Variables to analyze with correlation analysis
-cor_variable_names <- c("BP_diastolic", "BP_systolic", "wealth_quintile", "W401_AMOUNT_OF_PAIN")
-cor_method_names <- c("pearson", "pearson", "spearman", "spearman")
+#cor_variable_names <- c("BP_diastolic", "BP_systolic", "wealth_quintile", "W401_AMOUNT_OF_PAIN")
+#cor_method_names <- c("pearson", "pearson", "spearman", "spearman")
+cor_variable_names <- c("w203_own_health")
+cor_method_names <- c("spearman")
 
 # Variables to analyze with bivariate logistic regression
-logit_variable_names <- c("W1321A_MALARIA")
+#logit_variable_names <- c("W1321A_MALARIA")
+logit_variable_names <- c()
 
-load("~/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+#load("~/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+load("R:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+load("R:/Data/Ghana/20110725_From_Justin/20110727_WHSA2_SF36.Rdata")
+whsa2_15_feb_2011 <- data.frame(id=whsa2_15_feb_2011$id, w203_own_health=whsa2_15_feb_2011$w203_own_health)
+whsa2data050510 <- merge(whsa2data050510, whsa2_15_feb_2011, by.x="woman_id", by.y="id")
 
 min_radius <- 50
 max_radius <- 975
@@ -31,8 +38,9 @@ other_classes <- c(base_class, 'NONVEG')
 #col_prefix <- 'QB2002_NDVI_'
 col_prefix <- 'QB2010_NDVI_'
 
-#data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
-data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/20110503_50-to-975-by-25m/'
+#data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+#data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/20110503_50-to-975-by-25m/'
+data_dir <- 'R:/Data/Ghana/Egocentric_NBH_Data/20110503_50-to-975-by-25m/'
 
 load(paste(data_dir, 'merged_buffer_results.Rdata', sep=""))
 
@@ -153,7 +161,7 @@ for (n in 1:length(logit_variable_names)) {
     qplot(radii, odds_ratios_pvalues, geom="line", main=plot_title,
             xlab="Buffer Radius (meters)", ylab="p-value")
     plot_filename=paste(data_dir, col_prefix, 'logitplot_', variable_name,
-            '_p-values.png', sep="")
+            '_p-values.png',C:\Users\azvoleff\Code\R\Egocentric_NBHs sep="")
     ggsave(filename=plot_filename, width=WIDTH, height=HEIGHT, dpi=DPI)
 }
 

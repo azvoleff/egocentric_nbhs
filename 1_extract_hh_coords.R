@@ -11,7 +11,7 @@ DPI <- 300
 WIDTH <- 8.33
 HEIGHT <- 5.53
 
-data_dir <- '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
+data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
 
 #load("whsa_ii_data050510.Rdata")
 #load("R:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")

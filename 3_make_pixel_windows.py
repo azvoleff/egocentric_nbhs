@@ -9,8 +9,8 @@ import os
 
 import numpy as np
 
-#data_dir = '/home/azvoleff/Data/Ghana/Ecocentric_NBH_Data/'
-data_dir = 'F:/Data/Ghana/Ecocentric_NBH_Data/'
+#data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
 
 # Window size in pixels (2.4 meter pixels for QuickBird multispectral). The 
 # window size is the number of pixels included on each side of the center 
