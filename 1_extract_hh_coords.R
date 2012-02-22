@@ -11,13 +11,12 @@ DPI <- 300
 WIDTH <- 8.33
 HEIGHT <- 5.53
 
-data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+#data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
+data_dir <- 'G:/Data/Ghana/Egocentric_NBH_Data'
 
 #load("whsa_ii_data050510.Rdata")
-#load("R:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
-#load("F:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+load("G:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
 #load("/media/G-Tech_Data/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
-load("/media/Orange_Data/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
 
 hh <- with(whsa2data050510, data.frame(HHID, x=longitude, y=latitude))
 # Throw out household with longitude < .3 (too far from the rest to be a real 
@@ -28,12 +27,12 @@ coordinates(hh) <- c("x", "y")
 proj4string(hh) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 #hh.utm <- spTransform(hh, CRS("+proj=utm +zone=30 +ellps=WGS84 +units=m +no_defs"))
 hh.utm <- spTransform(hh, CRS("+init=epsg:32630"))
-writeOGR(hh.utm, data_dir, "WHSA_hh_UTM30", "ESRI Shapefile")
+writeOGR(hh.utm, data_dir, "WHSA_hh_UTM30", "ESRI Shapefile", overwrite_layer=TRUE)
 
 hh.utm <- as.data.frame(hh.utm)
 qplot(hh.utm$x, hh.utm$y, xlab="Easting", ylab="Northing", main="WHSA HH in UTM30")
-hh_plot_filename <- paste(data_dir, "WHSA_hh_UTM30.png", sep="")
+hh_plot_filename <- paste(data_dir, "/WHSA_hh_UTM30.png", sep="")
 ggsave(hh_plot_filename, width=WIDTH, height=HEIGHT, dpi=DPI)
 
-hh_csv_filename <- paste(data_dir, "WHSA_hh_UTM30.csv", sep="")
+hh_csv_filename <- paste(data_dir, "/WHSA_hh_UTM30.csv", sep="")
 write.csv(hh.utm, hh_csv_filename, row.names=F)

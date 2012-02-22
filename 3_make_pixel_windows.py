@@ -10,7 +10,7 @@ import os
 import numpy as np
 
 #data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
-data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'G:/Data/Ghana/Egocentric_NBH_Data/'
 
 # Window size in pixels (2.4 meter pixels for QuickBird multispectral). The 
 # window size is the number of pixels included on each side of the center 
@@ -18,7 +18,7 @@ data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
 # size. For a 12 meter window on QuickBird multispectral data, use a window 
 # size of 2 (giving a window that is 5 pixels per side). The window size 
 # determines the maximum buffer radius that can be considered.
-window_size = 500
+window_size = 1000
 window_width = (window_size*2) + 1
 
 ###############################################################################
