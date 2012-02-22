@@ -54,7 +54,10 @@ for (radius in radii) {
 
     plot_title <- paste(radius, "m radius (", area_hectares, " hectares)", sep="")
     # NOTE: mar format: c(bottom, left, top, right)
-    q <- qplot(values, facets=ind~., geom="histogram", binwidth=5, data=proportions, main=plot_title, xlab="Percentage in Class", ylab="Number of Neighborhoods")
-    plot_filename=paste(data_dir, col_prefix, '2component_plot_', radius, 'mradius.png', sep="")
+    q <- qplot(values, facets=ind~., geom="histogram", binwidth=5, 
+               data=proportions, main=plot_title, xlab="Percentage in Class", 
+               ylab="Number of Neighborhoods")
+    plot_filename=paste(data_dir, col_prefix, '2component_plot_', radius, 
+                        'mradius.png', sep="")
     ggsave(filename=plot_filename, width=WIDTH, height=HEIGHT, dpi=DPI)
 }
