@@ -12,13 +12,13 @@ WIDTH <- 8.33
 HEIGHT <- 5.53
 
 #data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
-data_dir <- 'G:/Data/Ghana/Egocentric_NBH_Data'
+data_dir <- 'M:/Data/Ghana/Egocentric_NBH_Data'
 
 #load("whsa_ii_data050510.Rdata")
-load("G:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+load("M:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
 #load("/media/G-Tech_Data/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
 
-hh <- with(whsa2data050510, data.frame(HHID, x=longitude, y=latitude))
+hh <- with(whsa2data050510, data.frame(woman_id, x=longitude, y=latitude))
 # Throw out household with longitude < .3 (too far from the rest to be a real 
 # datapoint).
 hh <- hh[!(hh$x < -.3),]
@@ -35,4 +35,5 @@ hh_plot_filename <- paste(data_dir, "/WHSA_hh_UTM30.png", sep="")
 ggsave(hh_plot_filename, width=WIDTH, height=HEIGHT, dpi=DPI)
 
 hh_csv_filename <- paste(data_dir, "/WHSA_hh_UTM30.csv", sep="")
+hh.utm$woman_id <- as.character(hh.utm$woman_id)
 write.csv(hh.utm, hh_csv_filename, row.names=F)
