@@ -18,7 +18,7 @@ if not os.path.exists(data_dir):
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
 min_buffer_radius = 50
-max_buffer_radius = 100
+max_buffer_radius = 525
 buffer_radius_increment = 25
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
@@ -142,7 +142,8 @@ def main(argv=None):
     for row_num in xrange(results_reshaped.shape[0]):
         row_part1 = hh_data[row_num]
         # Start with an integer as woman_id field needs no conversion
-        output_file_obj.write("%i"%row_part1[0])
+        woman_id = row_part1[0].strip('"')
+        output_file_obj.write("%s"%woman_id)
         output_file_obj.write(",%.10f"%row_part1[1])
         output_file_obj.write(",%.10f"%row_part1[2])
         row_part2 = results_reshaped[row_num, :]
