@@ -18,7 +18,7 @@ if not os.path.exists(data_dir):
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
 min_buffer_radius = 50
-max_buffer_radius = 1000
+max_buffer_radius = 100
 buffer_radius_increment = 25
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
@@ -27,7 +27,7 @@ buffer_radius_increment = 25
 # consider in the calculations, whereas window_size tells the script which 
 # precalculated window data set to use.
 window_size = 425
-window_width = (window_size*2) + 1
+window_width = (window_size*2)
 # Resolution is the resolution of the image in meters.
 resolution = 2.4
 
@@ -60,7 +60,7 @@ def main(argv=None):
     data = np.load(data_filename)
 
     hh_filename = base_filename + 'hh.npy'
-    hh_data = np.loadtxt(hh_filename)
+    hh_data = np.loadtxt(hh_filename, dtype={'names': ('woman_id', 'x', 'y'), 'formats': ('S11', 'f4', 'f4')})
 
     max_buffer_radius_possible = window_size*resolution
     assert max_buffer_radius <= max_buffer_radius_possible, "max_buffer_radius with %s dataset cannot exceed %.2f meters"%(data_filename, max_buffer_radius_possible)
@@ -77,7 +77,7 @@ def main(argv=None):
     # expressed directly in distance by multiplying by the resolution of the raster 
     # (this converts the distances from being expressed in number of pixels to 
     # number of meters).
-    x_dist = np.arange(-window_size, window_size+1, 1) * np.ones((window_width, 1))
+    x_dist = np.arange(-window_size, window_size, 1) * np.ones((window_width, 1))
     # Convert to meters
     x_dist = x_dist * np.abs(resolution)
     y_dist = x_dist.transpose() * np.abs(resolution)
@@ -98,7 +98,7 @@ def main(argv=None):
     # values.
     data = data + 1
     classes = classes + 1
-    column_headers = ["HHID", "x", "y"]
+    column_headers = ["woman_id", "x", "y"]
     for max_dist_index in xrange(len(max_dists)):
         cur_max_dist = max_dists[max_dist_index]
         print("Current dist: %s"%cur_max_dist)
@@ -127,11 +127,6 @@ def main(argv=None):
             classes=classes, window_size=window_size)
     results_reshaped = results.reshape((results.shape[0], -1, 1))
 
-    # Stack columns from household data so that HHIDs and (x, y) coordinates are 
-    # available.
-    hh_data = np.resize(hh_data, (hh_data.shape[0], hh_data.shape[1], 1))
-    results_reshaped = np.hstack((hh_data, results_reshaped))
-
     # Write results to CSV for import into R, Stata, SPSS, SAS, etc.
     results_csv_filename = base_filename + 'results.csv'
     try:
@@ -145,10 +140,14 @@ def main(argv=None):
     header = header + "\n"
     output_file_obj.write(header)
     for row_num in xrange(results_reshaped.shape[0]):
-        row = results_reshaped[row_num, :]
-        # Start with an integer as HHID field needs no conversion
-        output_file_obj.write("%i"%row[0])
-        for item in row[1:]:
+        row_part1 = hh_data[row_num]
+        # Start with an integer as woman_id field needs no conversion
+        output_file_obj.write("%i"%row_part1[0])
+        output_file_obj.write(",%.10f"%row_part1[1])
+        output_file_obj.write(",%.10f"%row_part1[2])
+        row_part2 = results_reshaped[row_num, :]
+        # Now write out the NBH fraction data
+        for item in row_part2:
             output_file_obj.write(",%.10f"%float(item))
         output_file_obj.write("\n")
     output_file_obj.close()
