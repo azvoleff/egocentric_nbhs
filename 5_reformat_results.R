@@ -4,16 +4,13 @@
 # and to a csv.
 
 #data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
-data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/20110503_100-to-1000-by-25m/'
+#data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/20110503_100-to-1000-by-25m/'
+data_dir <- 'G:/Data/Ghana/Egocentric_NBH_Data/'
 
-window_size <- 500
+window_size <- 425
 
-#load("whsa_ii_data050510.Rdata")
-#load("R:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
-#load("F:/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
-#load("/media/G-Tech_Data/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
-#load("/media/Orange_Data/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
-load("/home/azvoleff/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+#load("/home/azvoleff/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
+load("G:/Data/Ghana/WHSA/whsa_ii_data050510.Rdata")
 
 hh <- with(whsa2data050510, data.frame(HHID, x=longitude, y=latitude))
 # Bind the rownames so they can be used as unique IDs in the later merge.
