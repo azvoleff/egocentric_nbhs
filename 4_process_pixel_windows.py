@@ -10,7 +10,10 @@ import numpy as np
 
 #data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
 #data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
-data_dir = 'G:/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'M:/Data/Ghana/Egocentric_NBH_Data/'
+
+if not os.path.exists(data_dir):
+    raise IOError("Error accessing %s"%data_dir)
 
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
@@ -40,13 +43,13 @@ resolution = 2.4
 # Uncomment one of the two following sets of two lines to run on an NDVI image.
 # Note no class coding: for the NDVI thresholding, 0 is unknown, 1 is 
 # non-vegetation, and 2 is vegetation.
-#base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
-#classes_text_names_prefix = 'QB2002_NDVI'
-#classes_text_names = ["NA", "NONVEG", "VEG"]
-
-base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
-classes_text_names_prefix = 'QB2010_NDVI'
+base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
+classes_text_names_prefix = 'QB2002_NDVI'
 classes_text_names = ["NA", "NONVEG", "VEG"]
+
+#base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
+#classes_text_names_prefix = 'QB2010_NDVI'
+#classes_text_names = ["NA", "NONVEG", "VEG"]
 
 ###############################################################################
 # Main code starts here
