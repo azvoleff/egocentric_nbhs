@@ -10,15 +10,15 @@ import numpy as np
 
 #data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
 #data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
-data_dir = 'M:/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'N:/Data/Ghana/Egocentric_NBH_Data/'
 
 if not os.path.exists(data_dir):
     raise IOError("Error accessing %s"%data_dir)
 
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
-min_buffer_radius = 50
-max_buffer_radius = 525
+min_buffer_radius = 25
+max_buffer_radius = 1020
 buffer_radius_increment = 25
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
@@ -51,6 +51,7 @@ classes_text_names = ["NA", "NONVEG", "VEG"]
 #classes_text_names_prefix = 'QB2010_NDVI'
 #classes_text_names = ["NA", "NONVEG", "VEG"]
 
+print("Running calculations for " + base_filename)
 ###############################################################################
 # Main code starts here
 def main(argv=None):
@@ -69,7 +70,7 @@ def main(argv=None):
     # integers ranging from 0 (undefined) to the length of classes_text_names.
     classes = np.arange(0, len(classes_text_names))
     max_dists = np.arange(min_buffer_radius, max_buffer_radius, buffer_radius_increment)
-
+    
     print("***Calculating distance matrix...")
     # Calculate the distance matrix, storing in a matrix the distance of each cell 
     # from the center point of the matrix (where the matrix is a square matrix with 
