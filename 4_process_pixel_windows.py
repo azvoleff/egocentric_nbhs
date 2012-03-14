@@ -10,7 +10,7 @@ import numpy as np
 
 #data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
 #data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
-data_dir = 'M:/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'N:/Data/Ghana/Egocentric_NBH_Data/'
 
 if not os.path.exists(data_dir):
     raise IOError("Error accessing %s"%data_dir)
@@ -51,6 +51,7 @@ base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
 classes_text_names_prefix = 'QB2010_NDVI'
 classes_text_names = ["NA", "NONVEG", "VEG"]
 
+print("Running calculations for " + base_filename)
 ###############################################################################
 # Main code starts here
 def main(argv=None):
@@ -69,7 +70,7 @@ def main(argv=None):
     # integers ranging from 0 (undefined) to the length of classes_text_names.
     classes = np.arange(0, len(classes_text_names))
     max_dists = np.arange(min_buffer_radius, max_buffer_radius, buffer_radius_increment)
-
+    
     print("***Calculating distance matrix...")
     # Calculate the distance matrix, storing in a matrix the distance of each cell 
     # from the center point of the matrix (where the matrix is a square matrix with 
