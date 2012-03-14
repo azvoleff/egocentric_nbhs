@@ -12,10 +12,10 @@ WIDTH <- 8.33
 HEIGHT <- 5.53
 
 #data_dir <- '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
-data_dir <- 'N:/Data/Ghana/Egocentric_NBH_Data'
+data_dir <- 'M:/Data/Ghana/Egocentric_NBH_Data'
 
 #load("whsa_ii_data050510.Rdata")
-load("N:/Data/Ghana/WHSA/whsa_ii_data050510.Rdata")
+load("M:/Data/Ghana/WHSA/whsa_ii_data050510.Rdata")
 #load("/media/G-Tech_Data/Data/Ghana/20101206/whsa_ii_data050510.Rdata")
 
 hh <- with(whsa2data050510, data.frame(woman_id, x=longitude, y=latitude))

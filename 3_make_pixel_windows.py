@@ -34,16 +34,16 @@ window_width = (window_size*2)
 
 ###############################################################################
 # Uncomment these two lines to run on VIS image.
-#base_filename = data_dir + 'VIS_%ipixels_'%window_size
-#image_filename = data_dir + 'VIS_image.npz'
+base_filename = data_dir + 'VIS_%ipixels_'%window_size
+image_filename = data_dir + 'VIS_image.npz'
 
 ###############################################################################
 # Uncomment one of the two following sets of two lines to run on an NDVI image.
 #base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
 #image_filename = data_dir + 'Quickbird_2002_NDVI_thresholded.npz'
 
-base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
-image_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
+#base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
+#image_filename = data_dir + 'Quickbird_2010_NDVI_thresholded.npz'
 
 ###############################################################################
 # Main code starts here

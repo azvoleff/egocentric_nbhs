@@ -17,8 +17,8 @@ if not os.path.exists(data_dir):
 
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
-min_buffer_radius = 50
-max_buffer_radius = 525
+min_buffer_radius = 25
+max_buffer_radius = 1000
 buffer_radius_increment = 25
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
@@ -43,13 +43,13 @@ resolution = 2.4
 # Uncomment one of the two following sets of two lines to run on an NDVI image.
 # Note no class coding: for the NDVI thresholding, 0 is unknown, 1 is 
 # non-vegetation, and 2 is vegetation.
-base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
-classes_text_names_prefix = 'QB2002_NDVI'
-classes_text_names = ["NA", "NONVEG", "VEG"]
-
-#base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
-#classes_text_names_prefix = 'QB2010_NDVI'
+#base_filename = data_dir + '2002NDVI_%ipixels_'%window_size
+#classes_text_names_prefix = 'QB2002_NDVI'
 #classes_text_names = ["NA", "NONVEG", "VEG"]
+
+base_filename = data_dir + '2010NDVI_%ipixels_'%window_size
+classes_text_names_prefix = 'QB2010_NDVI'
+classes_text_names = ["NA", "NONVEG", "VEG"]
 
 ###############################################################################
 # Main code starts here
