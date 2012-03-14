@@ -10,7 +10,7 @@ import numpy as np
 
 #data_dir = '/home/azvoleff/Data/Ghana/Egocentric_NBH_Data/'
 #data_dir = 'F:/Data/Ghana/Egocentric_NBH_Data/'
-data_dir = 'N:/Data/Ghana/Egocentric_NBH_Data/'
+data_dir = 'M:/Data/Ghana/Egocentric_NBH_Data/'
 
 if not os.path.exists(data_dir):
     raise IOError("Error accessing %s"%data_dir)
