@@ -3,6 +3,8 @@
 # Used to extract a window of pixel around a each point in a set of points.
 # The image must be in a projected coordinate system.
 
+from ipdb import set_trace
+
 import sys
 import os
 
@@ -18,7 +20,7 @@ if not os.path.exists(data_dir):
 # max_buffer_radius species the maximum buffer size to consider (in meters) by 
 # specifying the maximum buffer radius.
 min_buffer_radius = 25
-max_buffer_radius = 1000
+max_buffer_radius = 1001
 buffer_radius_increment = 25
 
 # Here window_size is in PIXELS not meters. So it is the maximum diameter 
@@ -61,7 +63,7 @@ def main(argv=None):
     data = np.load(data_filename)
 
     hh_filename = base_filename + 'hh.npy'
-    hh_data = np.loadtxt(hh_filename, dtype={'names': ('woman_id', 'x', 'y'), 'formats': ('S11', 'f4', 'f4')})
+    hh_data = np.loadtxt(hh_filename, dtype={'names': ('woman_id', 'x', 'y'), 'formats': ('S12', 'f4', 'f4')})
 
     max_buffer_radius_possible = window_size*resolution
     assert max_buffer_radius <= max_buffer_radius_possible, "max_buffer_radius with %s dataset cannot exceed %.2f meters"%(data_filename, max_buffer_radius_possible)
@@ -90,13 +92,16 @@ def main(argv=None):
     dists = np.resize(dists, (dists.shape[0], dists.shape[1], 1))
 
     print("***Running class calculations...")
+    # Results will store the results as a three dimensional matrix, with the 
+    # first dimension being over the households, the second dimension over the 
+    # set of radii, and the third dimension over the set of classes.
     results = np.zeros((data.shape[2], len(max_dists), len(classes)))
     masked = np.zeros((dists.shape[0], dists.shape[1], data.shape[2]), dtype="bool")
     # To allow tracking of missing data, temporarily recode all the variables by 
     # adding one. This will allow true missing data (now coded as 1 rather than 
-    # zero) to be distinguished from data that was just masked out because it is 
-    # beyond the buffer. This means we also need to add 1 to all of the 'classes' 
-    # values.
+    # zero) to be distinguished from data that was just masked out because it 
+    # is outside the egocentric buffer. This means we also need to add 1 to all 
+    # of the 'classes' values.
     data = data + 1
     classes = classes + 1
     column_headers = ["woman_id", "x", "y"]
@@ -113,17 +118,30 @@ def main(argv=None):
     # Make column_headers a row vector
     column_headers = np.array(column_headers)
 
-    # Now convert counts into percentages of the total area for that particular 
-    # buffer radius.
+    # Now convert counts from number of pixels per class into percentages of 
+    # the total known area for that particular buffer radius.
     # Format of results array:
-    #     1st dimension: total
+    #     1st dimension: household
     #     2nd dimension: max_dist_index
     #     3rd dimension: class_index
     # Sum up the area for each class and max_dist, excluding the area in class 0 
     # (undefined).
-    area = np.sum(results[:,:,:], 2) # Areas are expressed in pixels.
-    for n in xrange(len(classes_text_names)):
-        results[:,:,n] = (results[:,:,n] / area) * 100
+    total_area = np.sum(results[:,:,:], 2) # Areas are expressed in pixels.
+    # Calculate the valid area by summing up the total area as above, but 
+    # without including the column for the "unknown" class.
+    known_area = np.sum(results[:,:,1:], 2) # Areas are expressed in pixels.
+    # For NBHs where the entire area is unknown, be sure to code veg and 
+    # non-veg classes as NAs - otherwise they would erroneously show up as 
+    # zeros.
+    no_known_area = (known_area == 0)
+    results[no_known_area, 1:] = np.nan
+    # Now calculate the area of the unknown class as a percentage of the total 
+    # egocentric buffer area (including unknown and known pixels).
+    results[:,:,0] = (results[:,:,0] / total_area) * 100
+    for n in xrange(1, len(classes)):
+        # Now calculate the area of the known classes as a percentage of the 
+        # known egocentric buffer area (including ONLY known pixels).
+        results[:,:,n] = (results[:,:,n] / known_area) * 100
     np.savez(results_filename, results=results, max_dists=max_dists,
             classes=classes, window_size=window_size)
     results_reshaped = results.reshape((results.shape[0], -1, 1))
@@ -150,7 +168,10 @@ def main(argv=None):
         row_part2 = results_reshaped[row_num, :]
         # Now write out the NBH fraction data
         for item in row_part2:
-            output_file_obj.write(",%.10f"%float(item))
+            if np.isnan(item):
+                output_file_obj.write(",NA")
+            else:
+                output_file_obj.write(",%.10f"%float(item))
         output_file_obj.write("\n")
     output_file_obj.close()
 
