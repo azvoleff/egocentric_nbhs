@@ -3,8 +3,6 @@
 # Used to extract a window of pixel around a each point in a set of points.
 # The image must be in a projected coordinate system.
 
-from ipdb import set_trace
-
 import sys
 import os
 
@@ -35,9 +33,9 @@ resolution = 2.4
 
 ###############################################################################
 # Uncomment these two lines to run on VIS image.
-#base_filename = data_dir + 'VIS_%ipixels_'%window_size
 # For the VIS classification, 0 is unknown, 1 is veg, 2 is soil, and 3 is 
 # impervious.
+#base_filename = data_dir + 'VIS_%ipixels_'%window_size
 #classes_text_names_prefix = 'QB2002_OBIA'
 #classes_text_names = ["NA", "VEG", "SOIL", "IMPERVIOUS"]
 
