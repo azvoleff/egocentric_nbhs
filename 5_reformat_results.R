@@ -38,17 +38,6 @@ merged_results$ROWID[row_id_gt_extra_hh] <- merged_results$ROWID[row_id_gt_extra
 #merged_results <- merge(merged_results, VIS_2002, by=c("ROWID", "woman_id"), all.x=TRUE)
 merged_results <- merge(merged_results, extra_hh, by=c("ROWID"), all=TRUE)
 
-# There shouldn't be any NAs (not directly). Whenever nothing is known about a 
-# neighborhoods cover type in a particular buffer, the _NA column for that 
-# buffer type should be set to 100 (as 100 percent of cover is therefore 
-# unknown) and the NAs in ans VIS or veg/nonveg columns should be set to 0, as 
-# nothing is known.
-unknown_cover_cols <- grep('_NA$', names(merged_results))
-unknown_cover_cols_NAs <- is.na(merged_results[unknown_cover_cols])
-merged_results[unknown_cover_cols][unknown_cover_cols_NAs] <- 100
-# Set any remaining NAs (that are not in the unknown cover cols) to zero
-merged_results[is.na(merged_results)] <- 0
-
 merged_results_CSV_file <- paste(data_dir, 'merged_buffer_results.csv', sep="")
 merged_results_Rdata_file <- paste(data_dir, 'merged_buffer_results.Rdata', sep="")
 
