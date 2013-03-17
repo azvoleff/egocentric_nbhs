@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Used to extract a window of pixel around a each point in a set of points.
+# Used to process a set of extracted windows of pixel around each point.
 # The image must be in a projected coordinate system.
 
 import sys
